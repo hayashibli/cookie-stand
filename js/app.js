@@ -41,15 +41,6 @@ var Seattle = {
     
 },
 
-    //function to sum total of sold cookies
-
-    // totalcookie: function (sum) {
-    //     var sum = 0;
-    //     for (var i = 0; i < this.cookiesSoldPerHour.length; i++) {
-    //         sum = sum + this.cookiesSoldPerHour[i];
-    //         console.log(sum, ' is the total number of sold cookies from 6am - 8pm');
-    //     }
-    // },
 }
 
 
