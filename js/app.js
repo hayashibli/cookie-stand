@@ -1,324 +1,133 @@
 'use strict';
+// console.log('js is working');
 
-var Seattle = {
-    name: 'Seattle',
-    minhourlycustomers: 23,
-    maxhourlycustomers: 65,
-    averagecookiespercustomer: 6.3,
-    cookiesSoldPerHour: [],
-    hours: ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm'],
-    Total: [],
+// // Creating constructor function for multiple objects
 
-    // method to get the cookies per customer
-    cookiesPurshasedPerHour: function () {
-        for (var i = 0; i < this.hours.length; i++) {
-            var cookiepercus = Math.floor(randomnumberofcustomersperhour(this.minhourlycustomers, this.maxhourlycustomers) * this.averagecookiespercustomer);
-            console.log(cookiepercus, 'cooke per cus');
-            this.cookiesSoldPerHour.push(cookiepercus);
-            console.log(this.cookiesSoldPerHour);
-        }
-    },
+// // Global variables
 
-    render: function () {
-        var parentElement = document.getElementById('header');
-        var h1 = document.createElement('h1');
-        parentElement.appendChild(h1);
-        h1.textContent = this.name;
 
-        var parentElement2 = document.getElementById('main');
-        var ulElement = document.createElement('ul');
-        parentElement2.appendChild(ulElement);
-        for (var i = 0; i < this.hours.length; i++) {
-            var li_ele = document.createElement('li');
-            ulElement.appendChild(li_ele);
-            li_ele.textContent = this.hours[i] + ':' + "   " + this.cookiesSoldPerHour[i] + ' cookies';
-        }
-        var total = document.createElement('Total');
-        ulElement.appendChild(total);
-        total.textContent = 'Total : ' + this.Total;
+var hours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm'];
+var hoursTotals = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+var parentElement = document.getElementById('body-part');
+var table = document.createElement('table');
+parentElement.appendChild(table);
 
-    },
+// create table header
+function rowHeader() {
+    var tr = document.createElement('tr');
+    table.appendChild(tr);
 
-    // function to sum total of sold cookies
+    var th = document.createElement('th');
+    tr.appendChild(th);
+    for (var i = 0; i < hours.length; i++) {
+        var th = document.createElement('th');
+        tr.appendChild(th);
+        th.textContent = hours[i];
+    }
+    var th = document.createElement('th');
+    th.textContent = 'Daily Location Total';
+    tr.appendChild(th);
+    table.appendChild(tr);
+}
+rowHeader();
 
-    totalcookie: function () {
-        var sum = 0;
-        for (var i = 0; i < this.cookiesSoldPerHour.length; i++) {
-            sum = sum + this.cookiesSoldPerHour[i];
-            console.log(sum, ' is the total number of sold cookies from 6am - 8pm');
-        }
-        this.Total.push(sum);
+
+var theLocation = [];
+// constructor function
+function ShopLocations(name, minhourlycustomers, maxhourlycustomers, averagecookiespercustomer) {
+    this.name = name;
+    this.minhourlycustomers = minhourlycustomers;
+    this.maxhourlycustomers = maxhourlycustomers;
+    this.averagecookiespercustomer = averagecookiespercustomer;
+    this.cookiesSoldPerHour = [];
+    this.Total = 0;
+    theLocation.push(this);
+}
+var totalOfTotal = 0;
+
+// Methods
+// method to get the cookies per customer
+
+ShopLocations.prototype.cookiesPurshasedPerHour = function () {
+    for (var i = 0; i < hours.length; i++) {
+        var cookiepercus = Math.ceil(randomnumberofcustomersperhour(this.minhourlycustomers, this.maxhourlycustomers) * this.averagecookiespercustomer);
+        console.log(cookiepercus, 'cooke per cus');
+        this.cookiesSoldPerHour.push(cookiepercus);
+        console.log(this.cookiesSoldPerHour);
+        this.Total = this.Total + cookiepercus;
         console.log(this.Total);
-    },
+        hoursTotals[i] = hoursTotals[i] + cookiepercus;
+        totalOfTotal += this.Total;
+        console.log(totalOfTotal);
+
+    }
+
+};
+
+ShopLocations.prototype.render = function () {
+
+    var tr = document.createElement('tr');
+    table.appendChild(tr);
+    var td = document.createElement('td');
+    tr.appendChild(td);
+    td.textContent = this.name;
+    for (var i = 0; i < this.cookiesSoldPerHour.length; i++) {
+        td = document.createElement('td');
+        td.textContent = this.cookiesSoldPerHour[i];
+        tr.appendChild(td);
+    }
+    td = document.createElement('td');
+    tr.appendChild(td);
+    td.textContent = this.Total;
+
+};
+
+
+// Objects
+
+var Seattle = new ShopLocations('Seattle', 23, 65, 6.3);
+console.log(Seattle);
+var Tokyo = new ShopLocations('Tokyo', 3, 24, 1.2);
+console.log(Tokyo);
+var Dubai = new ShopLocations('Dubai', 11, 38, 3.7);
+console.log(Dubai);
+var Paris = new ShopLocations('Paris', 20, 38, 2.3);
+console.log(Paris);
+var Lima = new ShopLocations('Lima', 2, 16, 4.6);
+console.log(Lima);
+
+
+for (var i = 0; i < theLocation.length; i++) {
+    theLocation[i].cookiesPurshasedPerHour();
+    theLocation[i].render();
 }
 
-Seattle.cookiesPurshasedPerHour();
-Seattle.render();
-Seattle.totalcookie();
 
 // function to generate random numbers
 function randomnumberofcustomersperhour(min, max) {
     var random = Math.floor(Math.random() * (max - min + 1) + min);
     console.log(random, 'random num');
     return random;
-
 };
 
 
+// create table footer
+function rowFooter() {
+    var tr = document.createElement('tr');
+    table.appendChild(tr)
+    var tfoot = document.createElement('tfoot');
+    tr.appendChild(tfoot);
+    tfoot.textContent = 'Total';
+    for (var i = 0; i < hoursTotals.length; i++) {
+        var td = document.createElement('td');
+        tr.appendChild(td);
+        td.textContent = hoursTotals[i];
+    }
+    var td = document.createElement('td');
+    tr.appendChild(td);
+    td.textContent = totalOfTotal
 
-var Tokyo = {
-    name: 'Tokyo',
-    minhourlycustomers: 3,
-    maxhourlycustomers: 24,
-    averagecookiespercustomer: 1.2,
-    cookiesSoldPerHour: [],
-    hours: ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm'],
-    Total: [],
-
-    // method to get the cookies per customer
-    cookiesPurshasedPerHour: function () {
-        for (var i = 0; i < this.hours.length; i++) {
-            var cookiepercus = Math.floor(randomnumberofcustomersperhour(this.minhourlycustomers, this.maxhourlycustomers) * this.averagecookiespercustomer);
-            console.log(cookiepercus, 'cooke per cus');
-            this.cookiesSoldPerHour.push(cookiepercus);
-            console.log(this.cookiesSoldPerHour);
-        }
-    },
-
-    render: function () {
-        var parentElement = document.getElementById('header');
-        var h1 = document.createElement('h1');
-        parentElement.appendChild(h1);
-        h1.textContent = this.name;
-
-        var parentElement2 = document.getElementById('main');
-        var ulElement = document.createElement('ul');
-        parentElement2.appendChild(ulElement);
-        for (var i = 0; i < this.hours.length; i++) {
-            var li_ele = document.createElement('li');
-            ulElement.appendChild(li_ele);
-            li_ele.textContent = this.hours[i] + ':' + "   " + this.cookiesSoldPerHour[i] + ' cookies';
-        }
-        var total = document.createElement('Total');
-        ulElement.appendChild(total);
-        total.textContent = 'Total : ' + this.Total;
-
-    },
-
-    // function to sum total of sold cookies
-
-    totalcookie: function () {
-        var sum = 0;
-        for (var i = 0; i < this.cookiesSoldPerHour.length; i++) {
-            sum = sum + this.cookiesSoldPerHour[i];
-            console.log(sum, ' is the total number of sold cookies from 6am - 8pm');
-        }
-        this.Total.push(sum);
-        console.log(this.Total);
-    },
 }
 
-Tokyo.cookiesPurshasedPerHour();
-Tokyo.render();
-Tokyo.totalcookie();
-
-// function to generate random numbers
-function randomnumberofcustomersperhour(min, max) {
-    var random = Math.floor(Math.random() * (max - min + 1) + min);
-    console.log(random, 'random num');
-    return random;
-
-};
-
-var Dubai = {
-    name: 'Dubai',
-    minhourlycustomers: 11,
-    maxhourlycustomers: 38,
-    averagecookiespercustomer: 3.7,
-    cookiesSoldPerHour: [],
-    hours: ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm'],
-    Total: [],
-
-    // method to get the cookies per customer
-    cookiesPurshasedPerHour: function () {
-        for (var i = 0; i < this.hours.length; i++) {
-            var cookiepercus = Math.floor(randomnumberofcustomersperhour(this.minhourlycustomers, this.maxhourlycustomers) * this.averagecookiespercustomer);
-            console.log(cookiepercus, 'cooke per cus');
-            this.cookiesSoldPerHour.push(cookiepercus);
-            console.log(this.cookiesSoldPerHour);
-        }
-    },
-
-    render: function () {
-        var parentElement = document.getElementById('header');
-        var h1 = document.createElement('h1');
-        parentElement.appendChild(h1);
-        h1.textContent = this.name;
-
-        var parentElement2 = document.getElementById('main');
-        var ulElement = document.createElement('ul');
-        parentElement2.appendChild(ulElement);
-        for (var i = 0; i < this.hours.length; i++) {
-            var li_ele = document.createElement('li');
-            ulElement.appendChild(li_ele);
-            li_ele.textContent = this.hours[i] + ':' + "   " + this.cookiesSoldPerHour[i] + ' cookies';
-        }
-        var total = document.createElement('Total');
-        ulElement.appendChild(total);
-        total.textContent = 'Total : ' + this.Total;
-
-    },
-
-    // function to sum total of sold cookies
-
-    totalcookie: function () {
-        var sum = 0;
-        for (var i = 0; i < this.cookiesSoldPerHour.length; i++) {
-            sum = sum + this.cookiesSoldPerHour[i];
-            console.log(sum, ' is the total number of sold cookies from 6am - 8pm');
-        }
-        this.Total.push(sum);
-        console.log(this.Total);
-    },
-}
-
-Dubai.cookiesPurshasedPerHour();
-Dubai.render();
-Dubai.totalcookie();
-
-// function to generate random numbers
-function randomnumberofcustomersperhour(min, max) {
-    var random = Math.floor(Math.random() * (max - min + 1) + min);
-    console.log(random, 'random num');
-    return random;
-
-};
-var Paris = {
-    name: 'Paris',
-    minhourlycustomers: 20,
-    maxhourlycustomers: 38,
-    averagecookiespercustomer: 2.3,
-    cookiesSoldPerHour: [],
-    hours: ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm'],
-    Total: [],
-
-    // method to get the cookies per customer
-    cookiesPurshasedPerHour: function () {
-        for (var i = 0; i < this.hours.length; i++) {
-            var cookiepercus = Math.floor(randomnumberofcustomersperhour(this.minhourlycustomers, this.maxhourlycustomers) * this.averagecookiespercustomer);
-            console.log(cookiepercus, 'cooke per cus');
-            this.cookiesSoldPerHour.push(cookiepercus);
-            console.log(this.cookiesSoldPerHour);
-        }
-    },
-
-    render: function () {
-        var parentElement = document.getElementById('header');
-        var h1 = document.createElement('h1');
-        parentElement.appendChild(h1);
-        h1.textContent = this.name;
-
-        var parentElement2 = document.getElementById('main');
-        var ulElement = document.createElement('ul');
-        parentElement2.appendChild(ulElement);
-        for (var i = 0; i < this.hours.length; i++) {
-            var li_ele = document.createElement('li');
-            ulElement.appendChild(li_ele);
-            li_ele.textContent = this.hours[i] + ':' + "   " + this.cookiesSoldPerHour[i] + ' cookies';
-        }
-        var total = document.createElement('Total');
-        ulElement.appendChild(total);
-        total.textContent = 'Total : ' + this.Total;
-
-    },
-
-    // function to sum total of sold cookies
-
-    totalcookie: function () {
-        var sum = 0;
-        for (var i = 0; i < this.cookiesSoldPerHour.length; i++) {
-            sum = sum + this.cookiesSoldPerHour[i];
-            console.log(sum, ' is the total number of sold cookies from 6am - 8pm');
-        }
-        this.Total.push(sum);
-        console.log(this.Total);
-    },
-}
-
-Paris.cookiesPurshasedPerHour();
-Paris.render();
-Paris.totalcookie();
-
-// function to generate random numbers
-function randomnumberofcustomersperhour(min, max) {
-    var random = Math.floor(Math.random() * (max - min + 1) + min);
-    console.log(random, 'random num');
-    return random;
-
-};
-
-var Lima = {
-    name: 'Lima',
-    minhourlycustomers: 20,
-    maxhourlycustomers: 38,
-    averagecookiespercustomer: 2.3,
-    cookiesSoldPerHour: [],
-    hours: ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm'],
-    Total: [],
-
-    // method to get the cookies per customer
-    cookiesPurshasedPerHour: function () {
-        for (var i = 0; i < this.hours.length; i++) {
-            var cookiepercus = Math.floor(randomnumberofcustomersperhour(this.minhourlycustomers, this.maxhourlycustomers) * this.averagecookiespercustomer);
-            console.log(cookiepercus, 'cooke per cus');
-            this.cookiesSoldPerHour.push(cookiepercus);
-            console.log(this.cookiesSoldPerHour);
-        }
-    },
-
-    render: function () {
-        var parentElement = document.getElementById('header');
-        var h1 = document.createElement('h1');
-        parentElement.appendChild(h1);
-        h1.textContent = this.name;
-
-        var parentElement2 = document.getElementById('main');
-        var ulElement = document.createElement('ul');
-        parentElement2.appendChild(ulElement);
-        for (var i = 0; i < this.hours.length; i++) {
-            var li_ele = document.createElement('li');
-            ulElement.appendChild(li_ele);
-            li_ele.textContent = this.hours[i] + ':' + "   " + this.cookiesSoldPerHour[i] + ' cookies';
-        }
-        var total = document.createElement('Total');
-        ulElement.appendChild(total);
-        total.textContent = 'Total : ' + this.Total;
-
-    },
-
-    // function to sum total of sold cookies
-
-    totalcookie: function () {
-        var sum = 0;
-        for (var i = 0; i < this.cookiesSoldPerHour.length; i++) {
-            sum = sum + this.cookiesSoldPerHour[i];
-            console.log(sum, ' is the total number of sold cookies from 6am - 8pm');
-        }
-        this.Total.push(sum);
-        console.log(this.Total);
-    },
-}
-
-Lima.cookiesPurshasedPerHour();
-Lima.render();
-Lima.totalcookie();
-
-// function to generate random numbers
-function randomnumberofcustomersperhour(min, max) {
-    var random = Math.floor(Math.random() * (max - min + 1) + min);
-    console.log(random, 'random num');
-    return random;
-
-};
-
+rowFooter()
 
