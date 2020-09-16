@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+ class-08
     <a href="/index.html">Salmon cookie site</a>
     <style>
         #body-part{
@@ -18,11 +20,46 @@
             text-decoration: none;
             color: palevioletred;
             border: white 3px solid;
+    <a href="/index.html">Stores</a>
+    <style>
+        #form {
+            width: 400px;
+            margin-top: 100px;
+
         }
     </style>
 </head>
-<body id="body-part">
-    
+
+<body>
+    <div id="body-part"></div>
+    <div id="form">
+        <fieldset>
+            <form id="Addstore">
+                <legend>
+                    <h2>Add store location</h2>
+                </legend>
+                <label for="Store">Store location :</label>
+                <input type="text" id="Store">
+                <br>
+                <br>
+                <label for="minInput"> min hourly customers :</label>
+                <input type="number" id="minInput">
+                <br>
+                <br>
+                <label for="maxInput">max hourly customers :</label>
+                <input type="number" id="maxInput">
+                <br>
+                <br>
+                <label for="avgCookies">ava cookie :</label>
+                <input type="number" id="avgCookies" step="0.1">
+                <br>
+                <br>
+                <input type="submit" id="submitbutton">
+
+            </form>
+        </fieldset>
+    </div>
     <script src="js/app.js"></script>
 </body>
+
 </html>
